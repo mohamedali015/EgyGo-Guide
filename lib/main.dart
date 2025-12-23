@@ -1,0 +1,65 @@
+import 'package:egy_go_guide/core/cache/cache_helper.dart';
+import 'package:egy_go_guide/core/helper/custom_bloc_observer.dart';
+import 'package:egy_go_guide/core/helper/get_it.dart';
+import 'package:egy_go_guide/core/helper/one_generate_routes.dart';
+import 'package:egy_go_guide/core/user/data/repo/user_repo.dart';
+import 'package:egy_go_guide/core/user/manager/user_cubit/user_cubit.dart';
+import 'package:egy_go_guide/core/utils/app_theme.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+
+import 'features/splash_and_onboarding/views/splash_view.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Bloc.observer = CustomBlocObserver();
+  await CacheHelper.init();
+  setupGetIt();
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return ScreenUtilInit(
+      designSize: const Size(428, 926),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) {
+        return MultiBlocProvider(
+          providers: [
+            // BlocProvider<GovernoratesCubit>(
+            //   create: (context) => GovernoratesCubit(getIt<GovernoratesRepo>())
+            //     ..fetchGovernorates(),
+            // ),
+            // BlocProvider<PlacesCubit>(
+            //   create: (context) =>
+            //   PlacesCubit(getIt<PlacesRepo>())..fetchPlaces(),
+            // ),
+            BlocProvider<UserCubit>(
+              create: (context) => UserCubit(getIt<UserRepo>()),
+            ),
+            // BlocProvider<PlaceCategoryCubit>(
+            //   create: (context) => PlaceCategoryCubit(getIt<PlacesRepo>()),
+            // ),
+            // BlocProvider<SelectGuideCubit>(
+            //   create: (context) => SelectGuideCubit(getIt<GuidesRepo>()),
+            // ),
+          ],
+          child: GetMaterialApp(
+            title: 'EgyGo',
+            debugShowCheckedModeBanner: false,
+            onGenerateRoute: onGenerateRoutes,
+            initialRoute: SplashView.routeName,
+            theme: AppTheme.lightTheme,
+          ),
+        );
+      },
+    );
+  }
+}

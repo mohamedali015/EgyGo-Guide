@@ -1,0 +1,48 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+
+import '../helper/my_responsive.dart';
+import '../utils/app_assets.dart';
+import 'svg_wrapper.dart';
+
+class RatingBarWrapper extends StatelessWidget {
+  const RatingBarWrapper({
+    super.key,
+    required this.rating,
+    required this.starSize,
+    required this.spaceBetweenStars,
+    this.ignoreGestures = true,
+    this.itemCount = 1,
+  });
+
+  final double rating;
+  final double starSize;
+  final double spaceBetweenStars;
+  final bool? ignoreGestures;
+  final int? itemCount;
+
+  @override
+  Widget build(BuildContext context) {
+    return RatingBar(
+      itemCount: itemCount!,
+      initialRating: rating,
+      allowHalfRating: false,
+      ignoreGestures: ignoreGestures!,
+      itemSize: MyResponsive.fontSize(value: starSize),
+      itemPadding: MyResponsive.paddingSymmetric(horizontal: spaceBetweenStars),
+      ratingWidget: RatingWidget(
+        full: SvgWrapper(
+          path: AppAssets.filledStar,
+          color: Colors.deepOrange,
+        ),
+        empty: SvgWrapper(
+          path: AppAssets.star,
+        ),
+        half: SvgWrapper(
+          path: AppAssets.star,
+        ),
+      ),
+      onRatingUpdate: (value) {},
+    );
+  }
+}
