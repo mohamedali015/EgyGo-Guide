@@ -65,7 +65,7 @@ class AuthRepoImpl implements AuthRepo {
           'password': password,
           'name': name,
           'phone': phone,
-          'role': 'tourist',
+          'role': 'guide',
         },
       );
 

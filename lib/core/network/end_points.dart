@@ -12,6 +12,7 @@ abstract class EndPoints {
   static const String getPlaces = 'places?page=1&limit=20';
   static const String createTrip = 'tourist/trips';
   static const String getMyTrips = 'tourist/trips';
+  static const String applyAsGuide = 'guide/apply';
 
   static String searchHome(String query) {
     return 'places/search?q=$query';
