@@ -5,7 +5,6 @@ import 'package:egy_go_guide/core/helper/one_generate_routes.dart';
 import 'package:egy_go_guide/core/user/data/repo/user_repo.dart';
 import 'package:egy_go_guide/core/user/manager/user_cubit/user_cubit.dart';
 import 'package:egy_go_guide/core/utils/app_theme.dart';
-import 'package:egy_go_guide/features/auth/views/get_started_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -53,9 +52,6 @@ class MyApp extends StatelessWidget {
             BlocProvider<PlaceCategoryCubit>(
               create: (context) => PlaceCategoryCubit(getIt<PlacesRepo>()),
             ),
-            // BlocProvider<SelectGuideCubit>(
-            //   create: (context) => SelectGuideCubit(getIt<GuidesRepo>()),
-            // ),
           ],
           child: GetMaterialApp(
             title: 'EgyGo',
