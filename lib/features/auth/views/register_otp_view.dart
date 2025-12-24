@@ -28,7 +28,6 @@ class RegisterOtpView extends StatelessWidget {
           return BlocConsumer<RegisterOtpCubit, RegisterOtpState>(
             listener: (context, state) {
               if (state is RegisterOtpVerified) {
-                // ToDo Navigate to home view and remove all previous routes
                 Navigator.pushNamedAndRemoveUntil(
                   context,
                   ApplyGuideScreen.routeName,

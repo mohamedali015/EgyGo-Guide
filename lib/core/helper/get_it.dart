@@ -4,7 +4,13 @@ import 'package:get_it/get_it.dart';
 
 import '../../features/auth/data/repo/auth_repo.dart';
 import '../../features/auth/data/repo/auth_repo_impl.dart';
+import '../../features/governorates/data/repos/governorates_repo/governorates_repo.dart';
+import '../../features/governorates/data/repos/governorates_repo/governorates_repo_impl.dart';
 import '../../features/guide_application/data/repos/guide_application_repo.dart';
+import '../../features/home_search/data/repo/home_search_repo.dart';
+import '../../features/home_search/data/repo/home_search_repo_impl.dart';
+import '../../features/places/data/repos/places_repo/places_repo.dart';
+import '../../features/places/data/repos/places_repo/places_repo_impl.dart';
 import '../network/api_helper.dart';
 
 final getIt = GetIt.instance;
@@ -24,14 +30,14 @@ void setupGetIt() {
     UserRepoImpl(apiHelper: getIt<ApiHelper>()),
   );
   //
-  // getIt.registerSingleton<GovernoratesRepo>(
-  //     GovernoratesRepoImpl(apiHelper: getIt<ApiHelper>()));
-  //
-  // getIt.registerSingleton<PlacesRepo>(
-  //     PlacesRepoImpl(apiHelper: getIt<ApiHelper>()));
-  //
-  // getIt.registerSingleton<HomeSearchRepo>(
-  //     HomeSearchRepoImpl(apiHelper: getIt<ApiHelper>()));
+  getIt.registerSingleton<GovernoratesRepo>(
+      GovernoratesRepoImpl(apiHelper: getIt<ApiHelper>()));
+
+  getIt.registerSingleton<PlacesRepo>(
+      PlacesRepoImpl(apiHelper: getIt<ApiHelper>()));
+
+  getIt.registerSingleton<HomeSearchRepo>(
+      HomeSearchRepoImpl(apiHelper: getIt<ApiHelper>()));
   //
   // getIt.registerSingleton<CreateTripFormRepo>(
   //     CreateTripFormRepoImpl(getIt<ApiHelper>()));

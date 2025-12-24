@@ -9,6 +9,7 @@ import '../../../../../core/helper/my_responsive.dart';
 import '../../../../../core/user/manager/user_cubit/user_cubit.dart';
 import '../../../../../core/utils/app_assets.dart';
 import '../../../../auth/views/get_started_view.dart';
+import '../../../../home/views/app_home_view.dart';
 import '../../on_boarding_view.dart';
 
 class SplashViewBody extends StatefulWidget {
@@ -55,8 +56,7 @@ class _SplashViewBodyState extends State<SplashViewBody> {
         if (CacheData.accessToken != null) {
           UserCubit.get(context).getUserData().then((bool result) {
             if (result) {
-              // ToDo: go to home
-              // MyNavigator.goTo(screen: AppHomeView(), isReplace: true);
+              MyNavigator.goTo(screen: AppHomeView(), isReplace: true);
             } else {
               MyNavigator.goTo(screen: GetStartedView(), isReplace: true);
             }

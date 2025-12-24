@@ -1,0 +1,98 @@
+import 'package:flutter/material.dart';
+import '../../../core/helper/my_responsive.dart';
+import '../../../core/shared_widgets/svg_wrapper.dart';
+import '../../../core/utils/app_assets.dart';
+import '../../../core/utils/app_colors.dart';
+import '../../../core/utils/app_strings.dart';
+import '../../profile/views/profile_view.dart';
+import 'home_view.dart';
+
+class AppHomeView extends StatefulWidget {
+  const AppHomeView({
+    super.key,
+    this.initialIndex = 0,
+  });
+
+  static const String routeName = 'app_bottom_navigation_bar';
+
+  final int initialIndex;
+
+  @override
+  State<AppHomeView> createState() => _AppHomeViewState();
+}
+
+class _AppHomeViewState extends State<AppHomeView> {
+  late int currentIndex;
+
+  final List<Widget> screens = const [
+    HomeView(),
+    Placeholder(),
+    ProfileView(),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    currentIndex = widget.initialIndex;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: IndexedStack(
+        index: currentIndex,
+        children: screens,
+      ),
+      // floatingActionButton: SizedBox(
+      //   height: MyResponsive.height(value: 65),
+      //   width: MyResponsive.width(value: 65),
+      //   child: FloatingActionButton(
+      //     onPressed: () {
+      //       MyNavigator.goTo(screen: CreateTripImageView());
+      //     },
+      //     backgroundColor: AppColors.primary,
+      //     child: SvgWrapper(
+      //       path: AppAssets.startTrip,
+      //       width: MyResponsive.fontSize(value: 35),
+      //     ),
+      //   ),
+      // ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: currentIndex,
+        onTap: (index) {
+          setState(() {
+            currentIndex = index;
+          });
+        },
+        items: [
+          BottomNavigationBarItem(
+            icon: SvgWrapper(
+              path: AppAssets.home,
+              width: MyResponsive.width(value: 25),
+              color: currentIndex == 0 ? AppColors.primary : AppColors.black,
+            ),
+            label: AppStrings.home,
+          ),
+          BottomNavigationBarItem(
+            icon: SvgWrapper(
+              path: AppAssets.trips,
+              width: MyResponsive.width(value: 25),
+              height: MyResponsive.height(value: 25),
+              color: currentIndex == 1 ? AppColors.primary : AppColors.black,
+            ),
+            label: AppStrings.trips,
+          ),
+          BottomNavigationBarItem(
+            icon: SvgWrapper(
+              path: AppAssets.profile,
+              width: MyResponsive.width(value: 25),
+              color: currentIndex == 2 ? AppColors.primary : AppColors.black,
+            ),
+            label: AppStrings.profile,
+          ),
+        ],
+      ),
+    );
+  }
+}

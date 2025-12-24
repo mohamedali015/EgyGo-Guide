@@ -1,4 +1,5 @@
 import 'package:egy_go_guide/core/user/data/models/user_model.dart';
+import 'package:egy_go_guide/features/places/data/models/places_response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
@@ -22,6 +23,7 @@ class UserCubit extends Cubit<UserState> {
 
   /// Data
   UserModel userModel = UserModel();
+  List<Place> favoritePlaces = [];
 
   final UserRepo userRepo;
 

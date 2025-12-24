@@ -11,6 +11,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import 'features/governorates/data/repos/governorates_repo/governorates_repo.dart';
+import 'features/governorates/manager/governorates_cubit/governorates_cubit.dart';
+import 'features/places/data/repos/places_repo/places_repo.dart';
+import 'features/places/manager/place_category_cubit/place_category_cubit.dart';
+import 'features/places/manager/places_cubit/places_cubit.dart';
 import 'features/splash_and_onboarding/views/splash_view.dart';
 
 void main() async {
@@ -34,20 +39,20 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return MultiBlocProvider(
           providers: [
-            // BlocProvider<GovernoratesCubit>(
-            //   create: (context) => GovernoratesCubit(getIt<GovernoratesRepo>())
-            //     ..fetchGovernorates(),
-            // ),
-            // BlocProvider<PlacesCubit>(
-            //   create: (context) =>
-            //   PlacesCubit(getIt<PlacesRepo>())..fetchPlaces(),
-            // ),
+            BlocProvider<GovernoratesCubit>(
+              create: (context) => GovernoratesCubit(getIt<GovernoratesRepo>())
+                ..fetchGovernorates(),
+            ),
+            BlocProvider<PlacesCubit>(
+              create: (context) =>
+                  PlacesCubit(getIt<PlacesRepo>())..fetchPlaces(),
+            ),
             BlocProvider<UserCubit>(
               create: (context) => UserCubit(getIt<UserRepo>()),
             ),
-            // BlocProvider<PlaceCategoryCubit>(
-            //   create: (context) => PlaceCategoryCubit(getIt<PlacesRepo>()),
-            // ),
+            BlocProvider<PlaceCategoryCubit>(
+              create: (context) => PlaceCategoryCubit(getIt<PlacesRepo>()),
+            ),
             // BlocProvider<SelectGuideCubit>(
             //   create: (context) => SelectGuideCubit(getIt<GuidesRepo>()),
             // ),
@@ -56,7 +61,7 @@ class MyApp extends StatelessWidget {
             title: 'EgyGo',
             debugShowCheckedModeBanner: false,
             onGenerateRoute: onGenerateRoutes,
-            initialRoute: GetStartedView.routeName,
+            initialRoute: SplashView.routeName,
             theme: AppTheme.lightTheme,
           ),
         );

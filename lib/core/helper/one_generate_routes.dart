@@ -4,7 +4,12 @@ import '../../features/auth/views/get_started_view.dart';
 import '../../features/auth/views/login_view.dart';
 import '../../features/auth/views/register_view.dart';
 import '../../features/auth/views/widgets/reset_password_widgets/forget_password_flow.dart';
+import '../../features/governorates/views/governorates_category_view.dart';
+import '../../features/governorates/views/governorates_view.dart';
 import '../../features/guide_application/presentation/views/apply_guide_screen.dart';
+import '../../features/home/views/app_home_view.dart';
+import '../../features/home_search/view/home_search_view.dart';
+import '../../features/places/views/places_view.dart';
 import '../../features/splash_and_onboarding/views/on_boarding_view.dart';
 import '../../features/splash_and_onboarding/views/splash_view.dart';
 
@@ -52,17 +57,17 @@ Route<dynamic> onGenerateRoutes(RouteSettings settings) {
         settings: settings,
       );
 
-    // case AppHomeView.routeName:
-    //   return MaterialPageRoute(
-    //     builder: (_) => const AppHomeView(),
-    //     settings: settings,
-    //   );
-    //
-    // case HomeSearchView.routeName:
-    //   return MaterialPageRoute(
-    //     builder: (_) => const HomeSearchView(),
-    //     settings: settings,
-    //   );
+    case AppHomeView.routeName:
+      return MaterialPageRoute(
+        builder: (_) => const AppHomeView(),
+        settings: settings,
+      );
+
+    case HomeSearchView.routeName:
+      return MaterialPageRoute(
+        builder: (_) => const HomeSearchView(),
+        settings: settings,
+      );
 
     // case CreateTripImageView.routeName:
     //   return MaterialPageRoute(
@@ -76,23 +81,23 @@ Route<dynamic> onGenerateRoutes(RouteSettings settings) {
     //     settings: settings,
     //   );
     //
-    // case GovernoratesView.routeName:
-    //   return MaterialPageRoute(
-    //     builder: (_) => const GovernoratesView(),
-    //     settings: settings,
-    //   );
-    //
-    // case GovernoratesCategoryView.routeName:
-    //   return MaterialPageRoute(
-    //     builder: (_) => const GovernoratesCategoryView(),
-    //     settings: settings,
-    //   );
-    //
-    // case PlacesView.routeName:
-    //   return MaterialPageRoute(
-    //     builder: (_) => const PlacesView(),
-    //     settings: settings,
-    //   );
+    case GovernoratesView.routeName:
+      return MaterialPageRoute(
+        builder: (_) => const GovernoratesView(),
+        settings: settings,
+      );
+
+    case GovernoratesCategoryView.routeName:
+      return MaterialPageRoute(
+        builder: (_) => const GovernoratesCategoryView(),
+        settings: settings,
+      );
+
+    case PlacesView.routeName:
+      return MaterialPageRoute(
+        builder: (_) => const PlacesView(),
+        settings: settings,
+      );
     //
     // case GuidesView.routeName:
     //   return MaterialPageRoute(

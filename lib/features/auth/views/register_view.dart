@@ -30,7 +30,6 @@ class RegisterView extends StatelessWidget {
                 MySnackbar.success(context,
                     'Registration successful! Please log in to verify your email.');
 
-                // ToDo Navigate to the next screen
                 Navigator.pushReplacementNamed(context, LoginView.routeName);
               }
               if (state is RegisterError) {
