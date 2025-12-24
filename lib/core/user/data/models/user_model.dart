@@ -35,6 +35,5 @@ class UserModel {
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     iV = json['__v'];
-    lastLogin = json['lastLogin'];
   }
 }

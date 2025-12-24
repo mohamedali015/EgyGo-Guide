@@ -1,3 +1,4 @@
+import 'package:egy_go_guide/features/guide_application/presentation/views/apply_guide_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -28,11 +29,11 @@ class RegisterOtpView extends StatelessWidget {
             listener: (context, state) {
               if (state is RegisterOtpVerified) {
                 // ToDo Navigate to home view and remove all previous routes
-                // Navigator.pushNamedAndRemoveUntil(
-                //   context,
-                //   AppHomeView.routeName,
-                //   (route) => false,
-                // );
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  ApplyGuideScreen.routeName,
+                  (route) => false,
+                );
               }
             },
             builder: (context, state) {

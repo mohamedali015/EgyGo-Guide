@@ -1,7 +1,10 @@
+import 'package:egy_go_guide/core/user/data/repo/user_repo.dart';
+import 'package:egy_go_guide/core/user/data/repo/user_repo_impl.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../features/auth/data/repo/auth_repo.dart';
 import '../../features/auth/data/repo/auth_repo_impl.dart';
+import '../../features/guide_application/data/repos/guide_application_repo.dart';
 import '../network/api_helper.dart';
 
 final getIt = GetIt.instance;
@@ -12,10 +15,14 @@ void setupGetIt() {
   getIt.registerSingleton<AuthRepo>(
     AuthRepoImpl(apiHelper: getIt<ApiHelper>()),
   );
+
+  getIt.registerSingleton<GuideApplicationRepo>(
+    GuideApplicationRepo(apiHelper: getIt<ApiHelper>()),
+  );
   //
-  // getIt.registerSingleton<UserRepo>(
-  //   UserRepoImpl(apiHelper: getIt<ApiHelper>()),
-  // );
+  getIt.registerSingleton<UserRepo>(
+    UserRepoImpl(apiHelper: getIt<ApiHelper>()),
+  );
   //
   // getIt.registerSingleton<GovernoratesRepo>(
   //     GovernoratesRepoImpl(apiHelper: getIt<ApiHelper>()));

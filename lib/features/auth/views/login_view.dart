@@ -1,3 +1,5 @@
+import 'package:egy_go_guide/core/user/manager/user_cubit/user_cubit.dart';
+import 'package:egy_go_guide/features/guide_application/presentation/views/apply_guide_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -28,18 +30,20 @@ class LoginView extends StatelessWidget {
           body: BlocConsumer<LoginCubit, LoginState>(
             listener: (context, state) {
               if (state is LoginSuccess) {
-                if (state.user.role != 'tourist') {
-                  MySnackbar.error(
-                      context, "You are not authorized to access this app.");
+                if (state.user.role != 'guide') {
+                  MySnackbar.error(context,
+                      "You are not authorized to access this app.\nDownload the user app instead.");
                 } else if (state.user.isEmailVerified != true) {
                   MyNavigator.goTo(
-                      screen: RegisterOtpView(
-                        email: state.user.email!,
-                      ),
-                      isReplace: true);
+                    screen: RegisterOtpView(
+                      email: state.user.email!,
+                    ),
+                    isReplace: true,
+                  );
                 } else {
                   MySnackbar.success(context, 'Login Successful');
-
+                  UserCubit.get(context).getUserData();
+                  MyNavigator.goTo(screen: ApplyGuideScreen());
                   //ToDo: Navigate to Home View
                   // Navigator.pushNamedAndRemoveUntil(
                   //     context, AppHomeView.routeName, (route) => false);
