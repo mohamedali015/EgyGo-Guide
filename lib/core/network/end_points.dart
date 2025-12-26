@@ -9,9 +9,9 @@ abstract class EndPoints {
   static const String getUserData = 'auth/me';
   static const String refreshToken = 'auth/refresh';
   static const String getGovernorates = 'provinces';
-  static const String getPlaces = 'places?page=1&limit=20';
-  static const String createTrip = 'tourist/trips';
-  static const String getMyTrips = 'tourist/trips';
+  static const String getPlaces = 'provinces/giza/places?type=archaeological';
+  static const String createTrip = 'guide/trips';
+  static const String getMyTrips = 'guide/trips';
   static const String applyAsGuide = 'guide/apply';
 
   static String searchHome(String query) {
@@ -22,27 +22,28 @@ abstract class EndPoints {
     return 'provinces/$governorate/places?type=$category';
   }
 
-  static String getTripGuides(String tripId) {
-    return 'tourist/trips/$tripId/guides';
-  }
-
-  static String selectGuide(String tripId) {
-    return 'tourist/trips/$tripId/select-guide';
-  }
-
   static String getTripDetails(String tripId) {
-    return 'tourist/trips/$tripId';
+    return 'guide/trips/$tripId';
   }
 
   static String cancelTrip(String tripId) {
-    return 'tourist/trips/$tripId/cancel';
+    return 'guide/trips/$tripId/cancel';
   }
 
-  static String initiateCallTrip(String tripId) {
-    return 'trips/$tripId/calls/initiate';
+  // static String initiateCallTrip(String tripId) {
+  //   return 'trips/$tripId/calls/initiate';
+  // }
+
+  static String joinCall(String callId) {
+    return 'calls/$callId/join';
   }
 
-  static String endCallTrip(String callId) {
-    return 'calls/$callId/end';
+  static String acceptTrip(String tripId) {
+    return 'guide/trips/$tripId/accept';
   }
+
+  static String rejectTrip(String tripId) {
+    return 'guide/trips/$tripId/reject';
+  }
+
 }

@@ -5,6 +5,7 @@ import '../../../core/utils/app_assets.dart';
 import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_strings.dart';
 import '../../profile/views/profile_view.dart';
+import '../../trip/views/trips_view.dart';
 import 'home_view.dart';
 
 class AppHomeView extends StatefulWidget {
@@ -26,7 +27,7 @@ class _AppHomeViewState extends State<AppHomeView> {
 
   final List<Widget> screens = const [
     HomeView(),
-    Placeholder(),
+    TripsView(),
     ProfileView(),
   ];
 
