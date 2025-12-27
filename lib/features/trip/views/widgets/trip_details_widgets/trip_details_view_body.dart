@@ -7,6 +7,7 @@ import 'package:egy_go_guide/features/trip/views/widgets/trip_details_widgets/tr
 import 'package:egy_go_guide/features/trip/views/widgets/trip_details_widgets/tourist_section.dart';
 import 'package:egy_go_guide/features/trip/views/widgets/trip_details_widgets/call_section.dart';
 import 'package:egy_go_guide/features/trip/views/widgets/trip_details_widgets/proposal_section.dart';
+import 'package:egy_go_guide/features/trip/views/widgets/trip_details_widgets/chat_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -207,7 +208,7 @@ class _TripDetailsViewBodyState extends State<TripDetailsViewBody> {
                       padding: EdgeInsets.all(12),
                       margin: EdgeInsets.only(bottom: 16),
                       decoration: BoxDecoration(
-                        color: Colors.blue.withOpacity(0.1),
+                        color: Colors.blue.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(color: Colors.blue, width: 1),
                       ),
@@ -261,6 +262,13 @@ class _TripDetailsViewBodyState extends State<TripDetailsViewBody> {
                   if (_shouldShowProposalSection(trip))
                     SizedBox(height: MyResponsive.height(value: 16)),
 
+                  // Chat Section (if available)
+                  if (_shouldShowChatSection(trip))
+                    ChatSection(trip: trip),
+
+                  if (_shouldShowChatSection(trip))
+                    SizedBox(height: MyResponsive.height(value: 16)),
+
                   SizedBox(height: MyResponsive.height(value: 24)),
                 ],
               ),
@@ -283,5 +291,14 @@ class _TripDetailsViewBodyState extends State<TripDetailsViewBody> {
     // Show proposal section when status is WAITING or PENDING_CONFIRMATION
     final status = trip.status?.toLowerCase();
     return status == 'pending_confirmation' || status == 'awaiting_confirmation';
+  }
+
+  bool _shouldShowChatSection(trip) {
+    // Show chat section for all states EXCEPT cancelled and rejected
+    final status = trip.status?.toLowerCase();
+    return status != 'cancelled' &&
+           status != 'rejected' &&
+           status != null &&
+           status.isNotEmpty;
   }
 }

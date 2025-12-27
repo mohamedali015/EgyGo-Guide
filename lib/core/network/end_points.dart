@@ -46,4 +46,7 @@ abstract class EndPoints {
     return 'guide/trips/$tripId/reject';
   }
 
+  static String getChatHistory(String tripId) {
+    return 'chat/$tripId/messages';
+  }
 }

@@ -13,6 +13,8 @@ import '../../features/places/data/repos/places_repo/places_repo.dart';
 import '../../features/places/data/repos/places_repo/places_repo_impl.dart';
 import '../../features/trip/data/repos/trip_repo.dart';
 import '../../features/trip/data/repos/trip_repo_impl.dart';
+import '../../features/trip/data/repos/chat_repo.dart';
+import '../../features/trip/data/repos/chat_repo_impl.dart';
 import '../network/api_helper.dart';
 
 final getIt = GetIt.instance;
@@ -43,6 +45,9 @@ void setupGetIt() {
 
   getIt.registerSingleton<TripRepo>(
       TripRepoImpl(apiHelper: getIt<ApiHelper>()));
+
+  getIt.registerSingleton<ChatRepo>(
+      ChatRepoImpl(apiHelper: getIt<ApiHelper>()));
   //
   // getIt.registerSingleton<CreateTripFormRepo>(
   //     CreateTripFormRepoImpl(getIt<ApiHelper>()));
