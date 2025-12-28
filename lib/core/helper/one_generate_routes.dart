@@ -13,6 +13,7 @@ import '../../features/places/views/places_view.dart';
 import '../../features/splash_and_onboarding/views/on_boarding_view.dart';
 import '../../features/splash_and_onboarding/views/splash_view.dart';
 import '../../features/trip/views/trip_chat_screen.dart';
+import '../../features/trip/views/trip_details_screen.dart';
 
 Route<dynamic> onGenerateRoutes(RouteSettings settings) {
   switch (settings.name) {
@@ -107,6 +108,13 @@ Route<dynamic> onGenerateRoutes(RouteSettings settings) {
           tripId: args['tripId'] as String,
           touristName: args['touristName'] as String,
         ),
+        settings: settings,
+      );
+
+    case TripDetailsScreen.routeName:
+      final tripId = settings.arguments as String;
+      return MaterialPageRoute(
+        builder: (_) => TripDetailsScreen(tripId: tripId),
         settings: settings,
       );
     //

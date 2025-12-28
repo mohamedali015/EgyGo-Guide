@@ -17,7 +17,7 @@ class SocketService {
 
   /// Get socket base URL from API base URL
   String get _socketUrl {
-    const baseUrl = 'https://1p1jgw5z-5001.euw.devtunnels.ms';
+    const baseUrl = 'https://egygo-backend-production.up.railway.app';
     return baseUrl;
   }
 

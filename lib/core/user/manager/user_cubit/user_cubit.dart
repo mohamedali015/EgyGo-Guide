@@ -1,3 +1,4 @@
+import 'package:egy_go_guide/core/services/notification_service.dart';
 import 'package:egy_go_guide/core/user/data/models/user_model.dart';
 import 'package:egy_go_guide/features/places/data/models/places_response_model.dart';
 import 'package:flutter/material.dart';
@@ -36,13 +37,40 @@ class UserCubit extends Cubit<UserState> {
         emit(UserGetError(error: error));
         return false;
       },
-      (user) {
+      (user) async {
         userModel = user;
 
         nameController.text = userModel.name ?? '';
         phoneController.text = userModel.phone ?? '';
 
         emit(UserGetSuccess(userModel: user));
+
+        // Debug: Print fcmTokens status
+        print('[UserCubit] 🔍 User data loaded');
+        print('[UserCubit] 🔍 fcmTokens field: ${userModel.fcmTokens}');
+        print('[UserCubit] 🔍 Is null? ${userModel.fcmTokens == null}');
+        print('[UserCubit] 🔍 Is empty? ${userModel.fcmTokens?.isEmpty}');
+
+        // Register FCM token if not already registered - with delay to ensure service is ready
+        Future.delayed(const Duration(seconds: 1), () async {
+          try {
+            if (userModel.fcmTokens == null || userModel.fcmTokens!.isEmpty) {
+              print('[UserCubit] 📤 No FCM tokens found in user data, registering now...');
+              final success = await NotificationService().registerToken();
+              if (success) {
+                print('[UserCubit] ✅ FCM token registration completed successfully');
+              } else {
+                print('[UserCubit] ❌ FCM token registration failed');
+              }
+            } else {
+              print('[UserCubit] ✅ FCM tokens already registered: ${userModel.fcmTokens!.length} token(s)');
+            }
+          } catch (e, stackTrace) {
+            print('[UserCubit] ❌ Exception during FCM token registration: $e');
+            print('[UserCubit] Stack trace: $stackTrace');
+          }
+        });
+
         return true;
       },
     );
@@ -89,6 +117,15 @@ class UserCubit extends Cubit<UserState> {
 
   /// logout
   Future<void> logout() async {
+    // Remove FCM token from backend before logout
+    try {
+      await NotificationService().removeToken();
+      print('[UserCubit] ✅ FCM token removed on logout');
+    } catch (e) {
+      print('[UserCubit] ⚠️ Failed to remove FCM token: $e');
+      // Continue with logout even if token removal fails
+    }
+
     await CacheHelper.removeData(key: CacheKeys.accessToken);
     await CacheHelper.removeData(key: CacheKeys.refreshToken);
     MyNavigator.goTo(screen: GetStartedView(), isReplace: true);

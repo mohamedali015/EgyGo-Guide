@@ -10,6 +10,7 @@ class UserModel {
   String? updatedAt;
   int? iV;
   String? lastLogin;
+  List<String>? fcmTokens; // Add FCM tokens field
 
   UserModel(
       {this.sId,
@@ -22,7 +23,9 @@ class UserModel {
       this.createdAt,
       this.updatedAt,
       this.iV,
-      this.lastLogin});
+      this.lastLogin,
+      this.fcmTokens // Add to constructor
+      });
 
   UserModel.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -35,5 +38,10 @@ class UserModel {
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     iV = json['__v'];
+    lastLogin = json['lastLogin'];
+    // Parse fcmTokens array
+    if (json['fcmTokens'] != null) {
+      fcmTokens = List<String>.from(json['fcmTokens']);
+    }
   }
 }
