@@ -1,15 +1,17 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/helper/my_navigator.dart';
 import '../../../../../core/helper/my_responsive.dart';
 import '../../../../../core/helper/my_snackbar.dart';
 import '../../../../../core/shared_widgets/custom_button.dart';
-import '../../../../../core/shared_widgets/custom_text_form_field.dart';
 import '../../../../../core/user/manager/user_cubit/user_cubit.dart';
 import '../../../../../core/user/manager/user_cubit/user_state.dart';
 import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/utils/app_strings.dart';
+import '../../../../../features/governorates/manager/governorates_cubit/governorates_cubit.dart';
+import '../../../../../features/governorates/manager/governorates_cubit/governorates_state.dart';
 import 'showing_dialog_widget.dart';
 
 class MyProfileViewBody extends StatelessWidget {
@@ -18,6 +20,13 @@ class MyProfileViewBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var userCubit = UserCubit.get(context);
+    var governoratesCubit = GovernoratesCubit.get(context);
+
+    // Fetch governorates if not already loaded
+    if (governoratesCubit.governorates.isEmpty) {
+      governoratesCubit.fetchGovernorates();
+    }
+
     return Form(
         key: userCubit.formKey,
         child: SingleChildScrollView(
@@ -45,15 +54,207 @@ class MyProfileViewBody extends StatelessWidget {
                 //         width: MyResponsive.width(value: 100)),
                 //   ),
                 // ),
-                SizedBox(height: MyResponsive.height(value: 66)),
-                CustomTextFormField(
-                    type: TextFieldType.name,
-                    controller: userCubit.nameController),
-                SizedBox(height: MyResponsive.height(value: 10)),
-                CustomTextFormField(
-                    type: TextFieldType.phone,
-                    controller: userCubit.phoneController),
-                SizedBox(height: MyResponsive.height(value: 75)),
+                SizedBox(height: MyResponsive.height(value: 25)),
+
+                // Guide-specific fields
+                if (userCubit.userModel.role == 'guide') ...[
+                  // Bio field
+                  TextFormField(
+                    controller: userCubit.bioController,
+                    maxLines: 4,
+                    decoration: InputDecoration(
+                      labelText: 'Bio',
+                      hintText: 'Tell us about yourself...',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: AppColors.grey),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: AppColors.primary),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your bio';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: MyResponsive.height(value: 15)),
+
+                  // Price per hour field
+                  TextFormField(
+                    controller: userCubit.pricePerHourController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      labelText: 'Price Per Hour (EGP)',
+                      hintText: 'Enter your hourly rate',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: AppColors.grey),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: AppColors.primary),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your price per hour';
+                      }
+                      if (double.tryParse(value) == null) {
+                        return 'Please enter a valid number';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: MyResponsive.height(value: 15)),
+
+                  // Languages field
+                  BlocBuilder<UserCubit, UserState>(
+                    builder: (context, state) {
+                      return Container(
+                        padding: EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: AppColors.grey),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Languages *',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.grey,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Wrap(
+                              spacing: 8,
+                              runSpacing: 8,
+                              children: [
+                                _buildLanguageChip(
+                                    context, userCubit, 'English'),
+                                _buildLanguageChip(
+                                    context, userCubit, 'Arabic'),
+                                _buildLanguageChip(
+                                    context, userCubit, 'Spanish'),
+                                _buildLanguageChip(
+                                    context, userCubit, 'French'),
+                                _buildLanguageChip(
+                                    context, userCubit, 'German'),
+                                _buildLanguageChip(
+                                    context, userCubit, 'Italian'),
+                                _buildLanguageChip(
+                                    context, userCubit, 'Chinese'),
+                                _buildLanguageChip(
+                                    context, userCubit, 'Japanese'),
+                                _buildLanguageChip(
+                                    context, userCubit, 'Russian'),
+                                _buildLanguageChip(
+                                    context, userCubit, 'Portuguese'),
+                                _buildLanguageChip(
+                                    context, userCubit, 'Turkish'),
+                                _buildLanguageChip(
+                                    context, userCubit, 'Korean'),
+                                _buildLanguageChip(context, userCubit, 'Hindi'),
+                                _buildLanguageChip(context, userCubit, 'Dutch'),
+                                _buildLanguageChip(context, userCubit, 'Greek'),
+                              ],
+                            ),
+                            if (userCubit.selectedLanguages.isEmpty)
+                              Padding(
+                                padding: EdgeInsets.only(top: 8),
+                                child: Text(
+                                  'Please select at least one language',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                  SizedBox(height: MyResponsive.height(value: 15)),
+
+                  // Governorates field
+                  BlocBuilder<GovernoratesCubit, GovernoratesState>(
+                    builder: (context, govState) {
+                      if (govState is GovernoratesLoading) {
+                        return Center(child: CircularProgressIndicator());
+                      }
+
+                      return BlocBuilder<UserCubit, UserState>(
+                        builder: (context, userState) {
+                          return Container(
+                            padding: EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: AppColors.grey),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Governorates *',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: AppColors.grey,
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                if (governoratesCubit.governorates.isEmpty)
+                                  Text(
+                                    'No governorates available',
+                                    style: TextStyle(
+                                      color: AppColors.grey,
+                                      fontSize: 14,
+                                    ),
+                                  )
+                                else
+                                  Wrap(
+                                    spacing: 8,
+                                    runSpacing: 8,
+                                    children: governoratesCubit.governorates
+                                        .map((gov) {
+                                      return _buildGovernorateChip(context,
+                                          userCubit, gov.sId!, gov.name!);
+                                    }).toList(),
+                                  ),
+                                if (userCubit.selectedProvinces.isEmpty)
+                                  Padding(
+                                    padding: EdgeInsets.only(top: 8),
+                                    child: Text(
+                                      'Please select at least one governorate',
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ],
+
+                SizedBox(height: MyResponsive.height(value: 40)),
                 BlocListener<UserCubit, UserState>(
                   listener: (context, state) {
                     if (state is UserDeleteSuccess) {
@@ -67,10 +268,16 @@ class MyProfileViewBody extends StatelessWidget {
                       MySnackbar.error(context, state.error);
                     }
                   },
-                  child: CustomButton(
-                    title: AppStrings.save,
-                    // onPressed: userCubit.updateUserData,
-                    foregroundColor: AppColors.white,
+                  child: BlocBuilder<UserCubit, UserState>(
+                    builder: (context, state) {
+                      return CustomButton(
+                        title: AppStrings.save,
+                        onPressed: state is UserUpdateLoading
+                            ? null
+                            : userCubit.updateProfile,
+                        foregroundColor: AppColors.white,
+                      );
+                    },
                   ),
                 ),
                 SizedBox(height: MyResponsive.height(value: 300)),
@@ -89,5 +296,39 @@ class MyProfileViewBody extends StatelessWidget {
             ),
           ),
         ));
+  }
+
+  Widget _buildLanguageChip(
+      BuildContext context, UserCubit userCubit, String language) {
+    final isSelected = userCubit.selectedLanguages.contains(language);
+    return FilterChip(
+      label: Text(language),
+      selected: isSelected,
+      onSelected: (selected) {
+        userCubit.toggleLanguage(language);
+      },
+      selectedColor: AppColors.primary.withValues(alpha: 0.2),
+      checkmarkColor: AppColors.primary,
+      labelStyle: TextStyle(
+        color: isSelected ? AppColors.primary : AppColors.grey,
+      ),
+    );
+  }
+
+  Widget _buildGovernorateChip(BuildContext context, UserCubit userCubit,
+      String provinceId, String name) {
+    final isSelected = userCubit.selectedProvinces.contains(provinceId);
+    return FilterChip(
+      label: Text(name),
+      selected: isSelected,
+      onSelected: (selected) {
+        userCubit.toggleProvince(provinceId);
+      },
+      selectedColor: AppColors.primary.withValues(alpha: 0.2),
+      checkmarkColor: AppColors.primary,
+      labelStyle: TextStyle(
+        color: isSelected ? AppColors.primary : AppColors.grey,
+      ),
+    );
   }
 }

@@ -19,14 +19,38 @@ class UserCubit extends Cubit<UserState> {
   /// Controllers
   final TextEditingController nameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
+  final TextEditingController bioController = TextEditingController();
+  final TextEditingController pricePerHourController = TextEditingController();
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   /// Data
   UserModel userModel = UserModel();
   List<Place> favoritePlaces = [];
+  List<String> selectedLanguages = [];
+  List<String> selectedProvinces = [];
 
   final UserRepo userRepo;
+
+  /// toggle language selection
+  void toggleLanguage(String language) {
+    if (selectedLanguages.contains(language)) {
+      selectedLanguages.remove(language);
+    } else {
+      selectedLanguages.add(language);
+    }
+    emit(UserInitial()); // Trigger UI rebuild
+  }
+
+  /// toggle province selection
+  void toggleProvince(String provinceId) {
+    if (selectedProvinces.contains(provinceId)) {
+      selectedProvinces.remove(provinceId);
+    } else {
+      selectedProvinces.add(provinceId);
+    }
+    emit(UserInitial()); // Trigger UI rebuild
+  }
 
   /// get user data
   Future<bool> getUserData() async {
@@ -42,6 +66,15 @@ class UserCubit extends Cubit<UserState> {
 
         nameController.text = userModel.name ?? '';
         phoneController.text = userModel.phone ?? '';
+
+        // Initialize guide-specific fields
+        if (userModel.guide != null) {
+          bioController.text = userModel.guide!.bio ?? '';
+          pricePerHourController.text =
+              userModel.guide!.pricePerHour?.toString() ?? '';
+          selectedLanguages = userModel.guide!.languages ?? [];
+          selectedProvinces = userModel.guide!.provinces ?? [];
+        }
 
         emit(UserGetSuccess(userModel: user));
 
@@ -76,44 +109,50 @@ class UserCubit extends Cubit<UserState> {
     );
   }
 
-  // /// update user data
-  // Future<void> updateUserData() async {
-  //   if (formKey.currentState!.validate()) {
-  //     emit(UserUpdateLoading());
-  //     var result = await userRepo.updateUserData(
-  //       name: nameController.text,
-  //       phone: phoneController.text,
-  //       imageFile: imageFile,
-  //     );
-  //
-  //     result.fold(
-  //           (String error) {
-  //         emit(UserUpdateError(error: error));
-  //       },
-  //           (message) async {
-  //         await getUserData();
-  //         emit(UserUpdateSuccess(message: message));
-  //       },
-  //     );
-  //   } else {
-  //     emit(UserUpdateError(error: TranslationKeys.fillAllFields.tr));
-  //   }
-  // }
-  //
-  // /// delete user account
-  // Future<void> deleteUserAccount() async {
-  //   emit(UserDeleteLoading());
-  //   var result = await userRepo.deleteUserData();
-  //   result.fold(
-  //         (String error) {
-  //       emit(UserDeleteError(error: error));
-  //     },
-  //         (message) {
-  //       logout();
-  //       emit(UserDeleteSuccess(message: message));
-  //     },
-  //   );
-  // }
+  /// update profile
+  Future<void> updateProfile() async {
+    if (formKey.currentState!.validate()) {
+      // Validate languages selection
+      if (selectedLanguages.isEmpty) {
+        emit(UserUpdateError(error: 'Please select at least one language'));
+        return;
+      }
+
+      // Validate provinces selection
+      if (selectedProvinces.isEmpty) {
+        emit(UserUpdateError(error: 'Please select at least one province'));
+        return;
+      }
+
+      emit(UserUpdateLoading());
+
+      // Parse price per hour
+      double? pricePerHour = double.tryParse(pricePerHourController.text);
+      if (pricePerHour == null) {
+        emit(UserUpdateError(error: 'Invalid price per hour'));
+        return;
+      }
+
+      var result = await userRepo.updateProfile(
+        languages: selectedLanguages,
+        pricePerHour: pricePerHour,
+        bio: bioController.text,
+        provinces: selectedProvinces,
+      );
+
+      result.fold(
+        (String error) {
+          emit(UserUpdateError(error: error));
+        },
+        (message) async {
+          await getUserData();
+          emit(UserUpdateSuccess(message: message));
+        },
+      );
+    } else {
+      emit(UserUpdateError(error: 'Please fill all required fields'));
+    }
+  }
 
   /// logout
   Future<void> logout() async {

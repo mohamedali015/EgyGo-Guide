@@ -6,13 +6,16 @@ abstract class EndPoints {
   static const String verifyOtp = 'auth/verify-otp';
   static const String resendOtp = 'auth/resend-otp';
   static const String changePassword = 'auth/change-password';
-  static const String getUserData = 'auth/me';
+  static const String getUserData =
+      'guide/profile'; // Changed from 'auth/me' to 'guide/profile'
   static const String refreshToken = 'auth/refresh';
   static const String getGovernorates = 'provinces';
   static const String getPlaces = 'provinces/giza/places?type=archaeological';
   static const String createTrip = 'guide/trips';
   static const String getMyTrips = 'guide/trips';
   static const String applyAsGuide = 'guide/apply';
+  static const String updateProfile =
+      'guide/profile'; // Add update profile endpoint
 
   // FCM Token endpoints
   static const String registerFcmToken = 'auth/fcm-token';

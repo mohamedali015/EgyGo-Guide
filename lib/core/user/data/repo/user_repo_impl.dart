@@ -34,6 +34,37 @@ class UserRepoImpl extends UserRepo {
     }
   }
 
+  // update profile
+  @override
+  Future<Either<String, String>> updateProfile({
+    required List<String> languages,
+    required double pricePerHour,
+    required String bio,
+    required List<String> provinces,
+  }) async {
+    try {
+      ApiResponse apiResponse = await apiHelper.putRequest(
+        endPoint: EndPoints.updateProfile,
+        isProtected: true,
+        data: {
+          'languages': languages,
+          'pricePerHour': pricePerHour,
+          'bio': bio,
+          'provinces': provinces,
+        },
+      );
+
+      if (apiResponse.success) {
+        return Right(apiResponse.message);
+      } else {
+        throw Exception(apiResponse.message);
+      }
+    } catch (e) {
+      ApiResponse apiResponse = ApiResponse.fromError(e);
+      return Left(apiResponse.message);
+    }
+  }
+
 //
 // // update user data
 // Future<Either<String, String>> updateUserData({
