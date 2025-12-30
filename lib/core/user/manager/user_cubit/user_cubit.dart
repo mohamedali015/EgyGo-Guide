@@ -29,6 +29,7 @@ class UserCubit extends Cubit<UserState> {
   List<Place> favoritePlaces = [];
   List<String> selectedLanguages = [];
   List<String> selectedProvinces = [];
+  bool isGuideActive = false;
 
   final UserRepo userRepo;
 
@@ -50,6 +51,18 @@ class UserCubit extends Cubit<UserState> {
       selectedProvinces.add(provinceId);
     }
     emit(UserInitial()); // Trigger UI rebuild
+  }
+
+  /// toggle guide active status
+  Future<void> toggleGuideActiveStatus() async {
+    // Toggle the status locally
+    isGuideActive = !isGuideActive;
+
+    // Save to SharedPreferences
+    await CacheHelper.saveData(key: CacheKeys.guideIsActive, value: isGuideActive);
+
+    // Update UI
+    emit(UserInitial());
   }
 
   /// get user data
@@ -74,6 +87,15 @@ class UserCubit extends Cubit<UserState> {
               userModel.guide!.pricePerHour?.toString() ?? '';
           selectedLanguages = userModel.guide!.languages ?? [];
           selectedProvinces = userModel.guide!.provinces ?? [];
+        }
+
+        // Load active status from SharedPreferences
+        final cachedActiveStatus = CacheHelper.getData(key: CacheKeys.guideIsActive);
+        if (cachedActiveStatus != null) {
+          isGuideActive = cachedActiveStatus as bool;
+        } else {
+          isGuideActive = false; // Default to false
+          await CacheHelper.saveData(key: CacheKeys.guideIsActive, value: isGuideActive);
         }
 
         emit(UserGetSuccess(userModel: user));

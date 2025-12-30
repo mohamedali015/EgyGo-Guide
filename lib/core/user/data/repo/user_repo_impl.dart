@@ -65,6 +65,31 @@ class UserRepoImpl extends UserRepo {
     }
   }
 
+  // toggle guide active status
+  @override
+  Future<Either<String, String>> toggleGuideActiveStatus({
+    required bool isActive,
+  }) async {
+    try {
+      ApiResponse apiResponse = await apiHelper.putRequest(
+        endPoint: EndPoints.updateProfile,
+        isProtected: true,
+        data: {
+          'isActive': isActive,
+        },
+      );
+
+      if (apiResponse.success) {
+        return Right(apiResponse.message);
+      } else {
+        throw Exception(apiResponse.message);
+      }
+    } catch (e) {
+      ApiResponse apiResponse = ApiResponse.fromError(e);
+      return Left(apiResponse.message);
+    }
+  }
+
 //
 // // update user data
 // Future<Either<String, String>> updateUserData({

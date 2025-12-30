@@ -58,6 +58,73 @@ class MyProfileViewBody extends StatelessWidget {
 
                 // Guide-specific fields
                 if (userCubit.userModel.role == 'guide') ...[
+                  // Active/Inactive Toggle
+                  BlocBuilder<UserCubit, UserState>(
+                    builder: (context, state) {
+                      return AnimatedContainer(
+                        duration: Duration(milliseconds: 300),
+                        padding: EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: userCubit.isGuideActive
+                              ? AppColors.primary.withValues(alpha: 0.1)
+                              : AppColors.grey.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: userCubit.isGuideActive
+                                ? AppColors.primary.withValues(alpha: 0.3)
+                                : AppColors.grey.withValues(alpha: 0.3),
+                            width: 1,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Profile Status',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: userCubit.isGuideActive
+                                          ? AppColors.primary
+                                          : AppColors.grey,
+                                    ),
+                                  ),
+                                  SizedBox(height: 4),
+                                  AnimatedDefaultTextStyle(
+                                    duration: Duration(milliseconds: 300),
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: userCubit.isGuideActive
+                                          ? AppColors.primary
+                                          : AppColors.grey,
+                                    ),
+                                    child: Text(
+                                      userCubit.isGuideActive
+                                          ? 'You are currently active'
+                                          : 'You are currently inactive',
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Switch(
+                              value: userCubit.isGuideActive,
+                              onChanged: (value) {
+                                userCubit.toggleGuideActiveStatus();
+                              },
+                              activeColor: AppColors.primary,
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                  SizedBox(height: MyResponsive.height(value: 20)),
+
                   // Bio field
                   TextFormField(
                     controller: userCubit.bioController,
@@ -280,7 +347,7 @@ class MyProfileViewBody extends StatelessWidget {
                     },
                   ),
                 ),
-                SizedBox(height: MyResponsive.height(value: 300)),
+                SizedBox(height: MyResponsive.height(value: 200)),
                 CustomButton(
                   title: AppStrings.deleteAccount,
                   onPressed: () {
@@ -292,6 +359,7 @@ class MyProfileViewBody extends StatelessWidget {
                   backgroundColor: AppColors.white,
                   foregroundColor: AppColors.primary,
                 ),
+                SizedBox(height: MyResponsive.height(value: 50)),
               ],
             ),
           ),

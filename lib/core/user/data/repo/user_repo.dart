@@ -13,4 +13,9 @@ abstract class UserRepo {
     required String bio,
     required List<String> provinces,
   });
+
+  // toggle guide active status
+  Future<Either<String, String>> toggleGuideActiveStatus({
+    required bool isActive,
+  });
 }
