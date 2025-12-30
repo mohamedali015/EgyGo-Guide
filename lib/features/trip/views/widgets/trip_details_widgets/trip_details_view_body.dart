@@ -135,10 +135,11 @@ class _TripDetailsViewBodyState extends State<TripDetailsViewBody> {
             SnackBar(
               content: Text(state.message),
               backgroundColor: Colors.red,
+              duration: Duration(seconds: 2),
             ),
           );
-          // Navigate back to trips screen
-          Navigator.pop(context);
+          // Navigate back to trips screen with result to trigger refresh
+          Navigator.pop(context, true);
         } else if (state is TripCancelFailed) {
           // State already restored in cubit, just show error
           ScaffoldMessenger.of(context).showSnackBar(
@@ -215,8 +216,11 @@ class _TripDetailsViewBodyState extends State<TripDetailsViewBody> {
             state is ProposalAccepting ||  // Show UI while accepting
             state is ProposalRejecting ||  // Show UI while rejecting
             state is TripCancelling ||
+            state is TripCancelFailed ||  // Show UI after cancel failed
             state is TripStarting ||  // Show UI with button loading
-            state is TripEnding) {  // Show UI with button loading
+            state is TripStartFailed ||  // Show UI after start failed
+            state is TripEnding ||  // Show UI with button loading
+            state is TripEndFailed) {  // Show UI after end failed
           final cubit = TripDetailsCubit.get(context);
           final trip = cubit.currentTrip;
 

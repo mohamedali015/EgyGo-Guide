@@ -3,6 +3,7 @@ import 'package:egy_go_guide/core/utils/app_colors.dart';
 import 'package:egy_go_guide/core/utils/app_text_styles.dart';
 import 'package:egy_go_guide/features/governorates/manager/governorates_cubit/governorates_cubit.dart';
 import 'package:egy_go_guide/features/trip/data/models/trips_response_model.dart';
+import 'package:egy_go_guide/features/trip/manager/trips_cubit/trips_cubit.dart';
 import 'package:egy_go_guide/features/trip/views/trip_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,14 +23,20 @@ class TripItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
       ),
       child: InkWell(
-        onTap: () {
+        onTap: () async {
           if (trip.sId != null) {
-            Navigator.push(
+            final result = await Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => TripDetailsScreen(tripId: trip.sId!),
               ),
             );
+
+            // If trip was cancelled (result == true), refresh the trips list
+            if (result == true && context.mounted) {
+              final tripsCubit = context.read<TripsCubit>();
+              await tripsCubit.fetchTrips();
+            }
           }
         },
         borderRadius: BorderRadius.circular(12),
