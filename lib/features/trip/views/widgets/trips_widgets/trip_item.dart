@@ -25,16 +25,23 @@ class TripItem extends StatelessWidget {
       child: InkWell(
         onTap: () async {
           if (trip.sId != null) {
+            final tripsCubit = context.read<TripsCubit>();
+
             final result = await Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => TripDetailsScreen(tripId: trip.sId!),
+                builder: (context) => TripDetailsScreen(
+                  tripId: trip.sId!,
+                  onTripUpdated: () {
+                    // This callback will be called immediately when socket receives updates
+                    tripsCubit.fetchTrips();
+                  },
+                ),
               ),
             );
 
             // If trip was cancelled (result == true), refresh the trips list
             if (result == true && context.mounted) {
-              final tripsCubit = context.read<TripsCubit>();
               await tripsCubit.fetchTrips();
             }
           }

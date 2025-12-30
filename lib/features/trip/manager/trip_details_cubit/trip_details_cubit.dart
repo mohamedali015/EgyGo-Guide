@@ -2,21 +2,24 @@ import 'dart:async';
 import 'package:egy_go_guide/core/network/socket_service.dart';
 import 'package:egy_go_guide/features/trip/data/models/trips_response_model.dart';
 import 'package:egy_go_guide/features/trip/data/repos/trip_repo.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'trip_details_state.dart';
 
 class TripDetailsCubit extends Cubit<TripDetailsState> {
-  TripDetailsCubit(this.repo) : super(TripDetailsInitial());
+  TripDetailsCubit(this.repo, {this.onTripUpdated}) : super(TripDetailsInitial());
 
   static TripDetailsCubit get(context) => BlocProvider.of(context);
   final TripRepo repo;
+  final VoidCallback? onTripUpdated; // Callback to refresh parent trips list
   final SocketService _socketService = SocketService(); // Fresh instance per cubit
 
   TripModel? currentTrip;
   TripDetailsState? _previousState;
   bool _isSocketInitialized = false;
   Timer? _pollTimer; // Fallback polling timer
+  bool hasReceivedSocketUpdate = false; // Track if socket update was received
 
   /// Initialize socket connection and listen to status updates
   /// Called when Trip Details screen is mounted
@@ -152,6 +155,9 @@ class TripDetailsCubit extends Cubit<TripDetailsState> {
         final oldStatus = currentTrip!.status;
         currentTrip!.status = newStatus;
 
+        // Mark that we received a socket update
+        hasReceivedSocketUpdate = true;
+
         print('[TripDetailsCubit - Guide] ✅ Local trip status updated!');
         print('[TripDetailsCubit - Guide]    Old: $oldStatus');
         print('[TripDetailsCubit - Guide]    New: $newStatus');
@@ -165,6 +171,12 @@ class TripDetailsCubit extends Cubit<TripDetailsState> {
         // Trigger UI rebuild with updated trip
         print('[TripDetailsCubit - Guide] 🔄 Emitting TripDetailsSuccess to rebuild UI...');
         emit(TripDetailsSuccess(currentTrip!));
+
+        // Call the callback to refresh trips list immediately
+        if (onTripUpdated != null) {
+          print('[TripDetailsCubit - Guide] 🔄 Calling onTripUpdated callback to refresh trips list...');
+          onTripUpdated!();
+        }
 
         print('[TripDetailsCubit - Guide] ✅ UI update triggered successfully!');
         print('[TripDetailsCubit - Guide] ═══════════════════════════════════════════');
