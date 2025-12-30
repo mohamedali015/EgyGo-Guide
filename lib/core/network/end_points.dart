@@ -53,6 +53,14 @@ abstract class EndPoints {
     return 'guide/trips/$tripId/reject';
   }
 
+  static String startTrip(String tripId) {
+    return 'trips/$tripId/start';
+  }
+
+  static String endTrip(String tripId) {
+    return 'trips/$tripId/end';
+  }
+
   static String getChatHistory(String tripId) {
     return 'chat/$tripId/messages';
   }

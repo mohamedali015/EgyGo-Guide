@@ -429,6 +429,62 @@ class TripDetailsCubit extends Cubit<TripDetailsState> {
     );
   }
 
+  /// Start trip (Guide starts the trip - moves from upcoming to in_progress)
+  /// Shows loading on button, then waits for socket to update status
+  Future<void> startTrip(String tripId) async {
+    print('[TripDetailsCubit] 🚀 Starting trip: $tripId');
+
+    // Emit loading state to show button loading
+    emit(TripStarting());
+
+    final result = await repo.startTrip(tripId);
+    result.fold(
+      (error) {
+        // Only emit error state on failure and restore
+        print('[TripDetailsCubit] ❌ Start trip failed: $error');
+        restoreTripDetailsState();
+        emit(TripStartFailed(error));
+      },
+      (tripDetailsResponse) {
+        // Success - but DON'T update the trip manually
+        // Just restore the current state and let socket handle the update
+        print('[TripDetailsCubit] ✅ Start trip API succeeded, waiting for socket update...');
+        restoreTripDetailsState();
+
+        // Socket will automatically receive trip_status_updated event
+        // and call _handleTripStatusUpdate which will update the UI
+      },
+    );
+  }
+
+  /// End trip (Guide ends the trip - moves from in_progress to completed)
+  /// Shows loading on button, then waits for socket to update status
+  Future<void> endTrip(String tripId) async {
+    print('[TripDetailsCubit] 🛑 Ending trip: $tripId');
+
+    // Emit loading state to show button loading
+    emit(TripEnding());
+
+    final result = await repo.endTrip(tripId);
+    result.fold(
+      (error) {
+        // Only emit error state on failure and restore
+        print('[TripDetailsCubit] ❌ End trip failed: $error');
+        restoreTripDetailsState();
+        emit(TripEndFailed(error));
+      },
+      (tripDetailsResponse) {
+        // Success - but DON'T update the trip manually
+        // Just restore the current state and let socket handle the update
+        print('[TripDetailsCubit] ✅ End trip API succeeded, waiting for socket update...');
+        restoreTripDetailsState();
+
+        // Socket will automatically receive trip_status_updated event
+        // and call _handleTripStatusUpdate which will update the UI
+      },
+    );
+  }
+
   @override
   Future<void> close() {
     disposeSocket();

@@ -313,7 +313,12 @@ class TripInfoSection extends StatelessWidget {
       case 'confirmed':
         statusColor = Colors.blue;
         break;
+      case 'upcoming':
+        statusColor = Colors.purple;
+        break;
       case 'in_progress':
+        statusColor = Colors.green;
+        break;
       case 'in_call':
         statusColor = Colors.green;
         break;
@@ -362,6 +367,8 @@ class TripInfoSection extends StatelessWidget {
         return 'Pending';
       case 'confirmed':
         return 'Confirmed';
+      case 'upcoming':
+        return 'Upcoming';
       case 'in_progress':
         return 'In Progress';
       case 'in_call':

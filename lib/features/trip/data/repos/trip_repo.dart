@@ -12,4 +12,6 @@ abstract class TripRepo {
   Future<Either<String, ProposalResponseModel>> acceptProposal(String tripId);
   Future<Either<String, ProposalResponseModel>> rejectProposal(String tripId);
   Future<Either<String, CancelTripResponseModel>> cancelTrip(String tripId, String reason);
+  Future<Either<String, TripDetailsResponseModel>> startTrip(String tripId);
+  Future<Either<String, TripDetailsResponseModel>> endTrip(String tripId);
 }

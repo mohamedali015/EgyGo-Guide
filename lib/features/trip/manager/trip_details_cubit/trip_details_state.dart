@@ -78,3 +78,35 @@ class TripCancelFailed extends TripDetailsState {
 
   TripCancelFailed(this.errorMessage);
 }
+
+// Start Trip States
+class TripStarting extends TripDetailsState {}
+
+class TripStarted extends TripDetailsState {
+  final TripModel trip;
+  final String message;
+
+  TripStarted(this.trip, this.message);
+}
+
+class TripStartFailed extends TripDetailsState {
+  final String errorMessage;
+
+  TripStartFailed(this.errorMessage);
+}
+
+// End Trip States
+class TripEnding extends TripDetailsState {}
+
+class TripEnded extends TripDetailsState {
+  final TripModel trip;
+  final String message;
+
+  TripEnded(this.trip, this.message);
+}
+
+class TripEndFailed extends TripDetailsState {
+  final String errorMessage;
+
+  TripEndFailed(this.errorMessage);
+}

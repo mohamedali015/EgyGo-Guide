@@ -111,6 +111,10 @@ class TripItem extends StatelessWidget {
         statusColor = Colors.blue;
         statusText = 'Confirmed';
         break;
+      case 'upcoming':
+        statusColor = Colors.purple;
+        statusText = 'Upcoming';
+        break;
       case 'in_progress':
         statusColor = Colors.green;
         statusText = 'In Progress';

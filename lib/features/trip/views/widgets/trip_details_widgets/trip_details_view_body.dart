@@ -8,6 +8,7 @@ import 'package:egy_go_guide/features/trip/views/widgets/trip_details_widgets/to
 import 'package:egy_go_guide/features/trip/views/widgets/trip_details_widgets/call_section.dart';
 import 'package:egy_go_guide/features/trip/views/widgets/trip_details_widgets/proposal_section.dart';
 import 'package:egy_go_guide/features/trip/views/widgets/trip_details_widgets/chat_section.dart';
+import 'package:egy_go_guide/features/trip/views/widgets/trip_details_widgets/trip_lifecycle_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -146,6 +147,40 @@ class _TripDetailsViewBodyState extends State<TripDetailsViewBody> {
               backgroundColor: Colors.red,
             ),
           );
+        } else if (state is TripStarted) {
+          // Show success message - trip started
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: Colors.green,
+              duration: Duration(seconds: 3),
+            ),
+          );
+        } else if (state is TripStartFailed) {
+          // State already restored in cubit, just show error
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.errorMessage),
+              backgroundColor: Colors.red,
+            ),
+          );
+        } else if (state is TripEnded) {
+          // Show success message - trip ended
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: Colors.green,
+              duration: Duration(seconds: 3),
+            ),
+          );
+        } else if (state is TripEndFailed) {
+          // State already restored in cubit, just show error
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.errorMessage),
+              backgroundColor: Colors.red,
+            ),
+          );
         }
       },
       builder: (context, state) {
@@ -179,7 +214,9 @@ class _TripDetailsViewBodyState extends State<TripDetailsViewBody> {
             state is ProposalRejectFailed ||
             state is ProposalAccepting ||  // Show UI while accepting
             state is ProposalRejecting ||  // Show UI while rejecting
-            state is TripCancelling) {
+            state is TripCancelling ||
+            state is TripStarting ||  // Show UI with button loading
+            state is TripEnding) {  // Show UI with button loading
           final cubit = TripDetailsCubit.get(context);
           final trip = cubit.currentTrip;
 
@@ -269,6 +306,13 @@ class _TripDetailsViewBodyState extends State<TripDetailsViewBody> {
                   if (_shouldShowChatSection(trip))
                     SizedBox(height: MyResponsive.height(value: 16)),
 
+                  // Trip Lifecycle Section (if cancelled or completed)
+                  if (_shouldShowLifecycleSection(trip))
+                    TripLifecycleSection(trip: trip),
+
+                  if (_shouldShowLifecycleSection(trip))
+                    SizedBox(height: MyResponsive.height(value: 16)),
+
                   SizedBox(height: MyResponsive.height(value: 24)),
                 ],
               ),
@@ -300,5 +344,14 @@ class _TripDetailsViewBodyState extends State<TripDetailsViewBody> {
            status != 'rejected' &&
            status != null &&
            status.isNotEmpty;
+  }
+
+  bool _shouldShowLifecycleSection(trip) {
+    // Show lifecycle section for confirmed, upcoming, in_progress, and completed statuses
+    final status = trip.status?.toLowerCase();
+    return status == 'confirmed' ||
+           status == 'upcoming' ||
+           status == 'in_progress' ||
+           status == 'completed';
   }
 }

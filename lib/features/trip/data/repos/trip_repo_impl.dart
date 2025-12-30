@@ -146,4 +146,47 @@ class TripRepoImpl implements TripRepo {
       return Left(errorResponse.message);
     }
   }
+
+  @override
+  Future<Either<String, TripDetailsResponseModel>> startTrip(String tripId) async {
+    try {
+      ApiResponse response = await apiHelper.postRequest(
+        endPoint: EndPoints.startTrip(tripId),
+        isProtected: true,
+      );
+      TripDetailsResponseModel tripDetailsResponseModel =
+          TripDetailsResponseModel.fromJson(response.data);
+      if (tripDetailsResponseModel.success != null &&
+          tripDetailsResponseModel.success == true) {
+        return Right(tripDetailsResponseModel);
+      } else {
+        throw Exception("Failed to start trip.");
+      }
+    } catch (e) {
+      ApiResponse errorResponse = ApiResponse.fromError(e);
+      return Left(errorResponse.message);
+    }
+  }
+
+  @override
+  Future<Either<String, TripDetailsResponseModel>> endTrip(String tripId) async {
+    try {
+      ApiResponse response = await apiHelper.postRequest(
+        endPoint: EndPoints.endTrip(tripId),
+        isProtected: true,
+        data: {},
+      );
+      TripDetailsResponseModel tripDetailsResponseModel =
+          TripDetailsResponseModel.fromJson(response.data);
+      if (tripDetailsResponseModel.success != null &&
+          tripDetailsResponseModel.success == true) {
+        return Right(tripDetailsResponseModel);
+      } else {
+        throw Exception("Failed to end trip.");
+      }
+    } catch (e) {
+      ApiResponse errorResponse = ApiResponse.fromError(e);
+      return Left(errorResponse.message);
+    }
+  }
 }
