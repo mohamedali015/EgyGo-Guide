@@ -5,7 +5,8 @@ abstract class EndPoints {
   static const String login = 'auth/login';
   static const String verifyOtp = 'auth/verify-otp';
   static const String resendOtp = 'auth/resend-otp';
-  static const String changePassword = 'auth/change-password';
+  static const String resetPassword = 'auth/reset-password';
+  static const String forgetPassword = 'auth/forget-password';
   static const String getUserData =
       'guide/profile'; // Changed from 'auth/me' to 'guide/profile'
   static const String refreshToken = 'auth/refresh';
