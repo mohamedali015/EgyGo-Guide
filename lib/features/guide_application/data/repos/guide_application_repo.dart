@@ -15,6 +15,7 @@ class GuideApplicationRepo {
     required String photo,
     required String isLicensed,
     required List<String> languages,
+    required List<String> governorateIds,
     required String pricePerHour,
     required String bio,
     String? tourismCard,
@@ -23,13 +24,11 @@ class GuideApplicationRepo {
     try {
       Map<String, dynamic> formDataMap = {
         'languages': languages.join(','),
+        'provinces': governorateIds.join(','),
         'pricePerHour': pricePerHour,
         'bio': bio,
         'isLicensed': isLicensed,
         'idDocument': await MultipartFile.fromFile(idDocument),
-        // 'tourismCard': tourismCard != null
-        //     ? await MultipartFile.fromFile(tourismCard)
-        //     : null,
         'photo': await MultipartFile.fromFile(photo),
       };
 

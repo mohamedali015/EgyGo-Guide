@@ -1,4 +1,5 @@
 import 'package:egy_go_guide/core/helper/get_it.dart';
+import 'package:egy_go_guide/core/helper/my_navigator.dart';
 import 'package:egy_go_guide/core/helper/my_snackbar.dart';
 import 'package:egy_go_guide/core/shared_widgets/custom_button.dart';
 import 'package:egy_go_guide/core/shared_widgets/custom_progress_hud.dart';
@@ -7,6 +8,9 @@ import 'package:egy_go_guide/core/utils/app_text_styles.dart';
 import 'package:egy_go_guide/features/guide_application/data/repos/guide_application_repo.dart';
 import 'package:egy_go_guide/features/guide_application/presentation/cubit/apply_guide_cubit.dart';
 import 'package:egy_go_guide/features/guide_application/presentation/cubit/apply_guide_state.dart';
+import 'package:egy_go_guide/features/governorates/manager/governorates_cubit/governorates_cubit.dart';
+import 'package:egy_go_guide/features/governorates/manager/governorates_cubit/governorates_state.dart';
+import 'package:egy_go_guide/features/home/views/app_home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,7 +35,7 @@ class ApplyGuideScreen extends StatelessWidget {
           listener: (context, state) {
             if (state is ApplyGuideSuccess) {
               MySnackbar.success(context, state.message);
-              Navigator.pop(context);
+              MyNavigator.goTo(screen: AppHomeView(), isReplace: true);
             }
             if (state is ApplyGuideError) {
               MySnackbar.error(context, state.error);
@@ -116,6 +120,20 @@ class ApplyGuideScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 12),
                     _buildLanguagesSelector(context, cubit),
+                    SizedBox(height: 24),
+                    Text(
+                      'Governorates',
+                      style: AppTextStyles.semiBold16,
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      'Select governorates where you can guide (Required)',
+                      style: AppTextStyles.regular12.copyWith(
+                        color: AppColors.grey,
+                      ),
+                    ),
+                    SizedBox(height: 12),
+                    _buildGovernoratesSelector(context, cubit),
                     SizedBox(height: 24),
                     Text(
                       'Price per Hour',
@@ -227,6 +245,67 @@ class ApplyGuideScreen extends StatelessWidget {
           ),
         );
       }).toList(),
+    );
+  }
+
+  Widget _buildGovernoratesSelector(
+      BuildContext context, ApplyGuideCubit cubit) {
+    return BlocBuilder<GovernoratesCubit, GovernoratesState>(
+      builder: (context, state) {
+        if (state is GovernoratesLoading) {
+          return Center(
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: CircularProgressIndicator(),
+            ),
+          );
+        } else if (state is GovernoratesSuccess) {
+          if (state.governorates.isEmpty) {
+            return Center(
+              child: Text(
+                'No governorates available',
+                style: AppTextStyles.regular14.copyWith(color: AppColors.grey),
+              ),
+            );
+          }
+
+          return Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: state.governorates.map((governorate) {
+              final isSelected =
+                  cubit.selectedGovernorates.contains(governorate);
+              return FilterChip(
+                label: Text(governorate.name ?? 'Unknown'),
+                selected: isSelected,
+                onSelected: (selected) {
+                  cubit.toggleGovernorate(governorate);
+                },
+                selectedColor: AppColors.primary,
+                checkmarkColor: AppColors.white,
+                labelStyle: AppTextStyles.regular14.copyWith(
+                  color: isSelected ? AppColors.white : AppColors.black,
+                ),
+                backgroundColor: AppColors.fill,
+                side: BorderSide(
+                  color: isSelected
+                      ? AppColors.primary
+                      : AppColors.grey.withValues(alpha: 0.3),
+                ),
+              );
+            }).toList(),
+          );
+        } else if (state is GovernoratesFailure) {
+          return Center(
+            child: Text(
+              'Failed to load governorates',
+              style: AppTextStyles.regular14.copyWith(color: AppColors.grey),
+            ),
+          );
+        } else {
+          return SizedBox.shrink();
+        }
+      },
     );
   }
 

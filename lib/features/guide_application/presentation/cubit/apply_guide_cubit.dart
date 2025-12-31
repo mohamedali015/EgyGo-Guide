@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:egy_go_guide/features/guide_application/data/repos/guide_application_repo.dart';
+import 'package:egy_go_guide/features/governorates/data/models/governorates_response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -19,6 +20,7 @@ class ApplyGuideCubit extends Cubit<ApplyGuideState> {
   File? englishCertificate;
 
   List<String> selectedLanguages = [];
+  List<Governorate> selectedGovernorates = [];
   TextEditingController pricePerHourController = TextEditingController();
   TextEditingController bioController = TextEditingController();
 
@@ -48,6 +50,15 @@ class ApplyGuideCubit extends Cubit<ApplyGuideState> {
       selectedLanguages.remove(language);
     } else {
       selectedLanguages.add(language);
+    }
+    emit(ApplyGuideToggle());
+  }
+
+  void toggleGovernorate(Governorate governorate) {
+    if (selectedGovernorates.contains(governorate)) {
+      selectedGovernorates.remove(governorate);
+    } else {
+      selectedGovernorates.add(governorate);
     }
     emit(ApplyGuideToggle());
   }
@@ -121,6 +132,12 @@ class ApplyGuideCubit extends Cubit<ApplyGuideState> {
       return;
     }
 
+    if (selectedGovernorates.isEmpty) {
+      emit(ApplyGuideError(error: 'Please select at least one governorate'));
+      emit(ApplyGuideInitial());
+      return;
+    }
+
     if (pricePerHourController.text.isEmpty) {
       emit(ApplyGuideError(error: 'Price per hour is required'));
       emit(ApplyGuideInitial());
@@ -142,11 +159,18 @@ class ApplyGuideCubit extends Cubit<ApplyGuideState> {
 
     emit(ApplyGuideLoading());
 
+    // Extract governorate IDs
+    final governorateIds = selectedGovernorates
+        .map((gov) => gov.sId ?? '')
+        .where((id) => id.isNotEmpty)
+        .toList();
+
     var result = await repo.applyAsGuide(
       idDocument: idDocument!.path,
       photo: photo!.path,
       isLicensed: isLicensed.toString(),
       languages: selectedLanguages,
+      governorateIds: governorateIds,
       pricePerHour: pricePerHour.toString(),
       bio: bioController.text.trim(),
       tourismCard: tourismCard?.path,
