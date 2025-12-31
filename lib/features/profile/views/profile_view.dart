@@ -1,3 +1,4 @@
+import 'package:egy_go_guide/features/trip/views/trips_view.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -107,7 +108,7 @@ class ProfileView extends StatelessWidget {
             ProfileRowWidget(
               title: AppStrings.myTrips,
               imagePath: AppAssets.trips,
-              goTo: Placeholder(),
+              goTo: TripsView(),
             ),
             SizedBox(height: MyResponsive.height(value: 38)),
             ProfileRowWidget(

@@ -95,26 +95,26 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                 ],
               ),
             ),
-            SizedBox(
-              height: MyResponsive.height(value: 43),
-            ),
-            OrDivider(),
-            SizedBox(
-              height: MyResponsive.height(value: 41),
-            ),
-            SocialLoginButton(
-              imagePath: AppAssets.googleLogo,
-              title: AppStrings.loginWithGoogle,
-              onPressed: () {},
-            ),
-            SizedBox(
-              height: MyResponsive.height(value: 16),
-            ),
-            SocialLoginButton(
-              imagePath: AppAssets.facebookLogo,
-              title: AppStrings.loginWithFacebook,
-              onPressed: () {},
-            ),
+            // SizedBox(
+            //   height: MyResponsive.height(value: 43),
+            // ),
+            // OrDivider(),
+            // SizedBox(
+            //   height: MyResponsive.height(value: 41),
+            // ),
+            // SocialLoginButton(
+            //   imagePath: AppAssets.googleLogo,
+            //   title: AppStrings.loginWithGoogle,
+            //   onPressed: () {},
+            // ),
+            // SizedBox(
+            //   height: MyResponsive.height(value: 16),
+            // ),
+            // SocialLoginButton(
+            //   imagePath: AppAssets.facebookLogo,
+            //   title: AppStrings.loginWithFacebook,
+            //   onPressed: () {},
+            // ),
             SizedBox(
               height: MyResponsive.height(value: 80),
             ),

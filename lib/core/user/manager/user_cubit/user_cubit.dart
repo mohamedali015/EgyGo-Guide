@@ -55,6 +55,12 @@ class UserCubit extends Cubit<UserState> {
 
   /// toggle guide active status
   Future<void> toggleGuideActiveStatus() async {
+    // Show loading state
+    emit(UserUpdateLoading());
+
+    // Fake 3 seconds loading
+    await Future.delayed(Duration(seconds: 3));
+
     // Toggle the status locally
     isGuideActive = !isGuideActive;
 

@@ -61,6 +61,8 @@ class MyProfileViewBody extends StatelessWidget {
                   // Active/Inactive Toggle
                   BlocBuilder<UserCubit, UserState>(
                     builder: (context, state) {
+                      final isLoading = state is UserUpdateLoading;
+
                       return AnimatedContainer(
                         duration: Duration(milliseconds: 300),
                         padding: EdgeInsets.all(16),
@@ -103,21 +105,36 @@ class MyProfileViewBody extends StatelessWidget {
                                           : AppColors.grey,
                                     ),
                                     child: Text(
-                                      userCubit.isGuideActive
-                                          ? 'You are currently active'
-                                          : 'You are currently inactive',
+                                      isLoading
+                                          ? 'Updating status...'
+                                          : userCubit.isGuideActive
+                                              ? 'You are currently active'
+                                              : 'You are currently inactive',
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                            Switch(
-                              value: userCubit.isGuideActive,
-                              onChanged: (value) {
-                                userCubit.toggleGuideActiveStatus();
-                              },
-                              activeColor: AppColors.primary,
-                            ),
+                            // Show loading indicator or switch
+                            if (isLoading)
+                              SizedBox(
+                                width: 24,
+                                height: 24,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.5,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    AppColors.primary,
+                                  ),
+                                ),
+                              )
+                            else
+                              Switch(
+                                value: userCubit.isGuideActive,
+                                onChanged: (value) {
+                                  userCubit.toggleGuideActiveStatus();
+                                },
+                                activeColor: AppColors.primary,
+                              ),
                           ],
                         ),
                       );
@@ -132,6 +149,8 @@ class MyProfileViewBody extends StatelessWidget {
                     decoration: InputDecoration(
                       labelText: 'Bio',
                       hintText: 'Tell us about yourself...',
+                      filled: true,
+                      fillColor: AppColors.fill,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -158,6 +177,8 @@ class MyProfileViewBody extends StatelessWidget {
                     controller: userCubit.pricePerHourController,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
+                      filled: true,
+                      fillColor: AppColors.fill,
                       labelText: 'Price Per Hour (EGP)',
                       hintText: 'Enter your hourly rate',
                       border: OutlineInputBorder(
@@ -347,19 +368,19 @@ class MyProfileViewBody extends StatelessWidget {
                     },
                   ),
                 ),
-                SizedBox(height: MyResponsive.height(value: 200)),
-                CustomButton(
-                  title: AppStrings.deleteAccount,
-                  onPressed: () {
-                    showCupertinoDialog(
-                      context: context,
-                      builder: (context) => const ShowingDialogWidget(),
-                    );
-                  },
-                  backgroundColor: AppColors.white,
-                  foregroundColor: AppColors.primary,
-                ),
-                SizedBox(height: MyResponsive.height(value: 50)),
+                SizedBox(height: MyResponsive.height(value: 60)),
+                // CustomButton(
+                //   title: AppStrings.deleteAccount,
+                //   onPressed: () {
+                //     showCupertinoDialog(
+                //       context: context,
+                //       builder: (context) => const ShowingDialogWidget(),
+                //     );
+                //   },
+                //   backgroundColor: AppColors.white,
+                //   foregroundColor: AppColors.primary,
+                // ),
+                // SizedBox(height: MyResponsive.height(value: 50)),
               ],
             ),
           ),

@@ -3,17 +3,30 @@ abstract class AppStrings {
   static const String skip = "Skip";
   static const String next = "Next";
   static const String getStarted = "Get Started";
-  static const String onBoardingTitle1 = 'HI. Welcome to Egy Go!';
+
+  // static const String onBoardingTitle1 = 'HI. Welcome to Egy Go!';
+  // static const String onBoardingSubtitle1 =
+  //     'Start your journey with a curated view of Egypt’s most iconic places and\ninspiring experiences—all in one place.';
+  //
+  // static const String onBoardingTitle2 = 'Smart Travel Guidance';
+  // static const String onBoardingSubtitle2 =
+  //     'Get real-time tips, personalized routes, and\ntrusted guides to make every step effortless';
+  //
+  // static const String onBoardingTitle3 = 'Plan • Book • Enjoy';
+  // static const String onBoardingSubtitle3 =
+  //     'Save your favorite spots, organize trips, and\naccess everything you need in one seamless app';
+
+  static const String onBoardingTitle1 = 'Welcome, Guide!';
   static const String onBoardingSubtitle1 =
-      'Start your journey with a curated view of Egypt’s most iconic places and\ninspiring experiences—all in one place.';
+      'Discover new trips, connect with travelers, and\nstart guiding unforgettable experiences across Egypt.';
 
-  static const String onBoardingTitle2 = 'Smart Travel Guidance';
+  static const String onBoardingTitle2 = 'Manage Trips in Real-Time';
   static const String onBoardingSubtitle2 =
-      'Get real-time tips, personalized routes, and\ntrusted guides to make every step effortless';
+      'Receive trip requests, join calls instantly, and\nstay updated with live trip status changes.';
 
-  static const String onBoardingTitle3 = 'Plan • Book • Enjoy';
+  static const String onBoardingTitle3 = 'Guide • Connect • Earn';
   static const String onBoardingSubtitle3 =
-      'Save your favorite spots, organize trips, and\naccess everything you need in one seamless app';
+      'Accept or reject offers, communicate with travelers,\nand grow your income seamlessly.';
 
   ///// get started screen /////
   static const String getStartedTitle = "Discover\nAmazing Places";

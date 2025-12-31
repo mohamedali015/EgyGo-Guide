@@ -19,7 +19,7 @@ class OnBoardingContainerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     var cubit = OnBoardingCubit.get(context);
     return Container(
-      height: MyResponsive.height(value: 250),
+      height: MyResponsive.height(value: 260),
       padding: MyResponsive.paddingSymmetric(
         horizontal: 18,
         vertical: 22,
