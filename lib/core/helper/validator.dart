@@ -29,12 +29,25 @@ abstract class Validator {
     if (value.length < 6) {
       return AppStrings.passwordLength;
     }
+    // Password must contain at least one uppercase, one lowercase, one digit, and one special character
+    final passwordRegex = RegExp(
+      r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]',
+    );
+    if (!passwordRegex.hasMatch(value)) {
+      return AppStrings.passwordValid;
+    }
     return null;
   }
 
   static String? confirmPassword(String? value, String? password) {
     if (value == null || value.isEmpty) {
       return AppStrings.confirmPasswordRequired;
+    }
+    final passwordRegex = RegExp(
+      r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]',
+    );
+    if (!passwordRegex.hasMatch(value)) {
+      return AppStrings.passwordValid;
     }
     if (value != password) {
       return AppStrings.passwordNotMatch;
